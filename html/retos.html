@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retos - HoopersNet</title>
+
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/feed.css" />
+  <link rel="stylesheet" href="/css/retos.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png">
+  <script src="https://kit.fontawesome.com/d47483145d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- NAVBAR (simple y limpio, consistente con el feed) -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="index.html" class="logo">
+        <img src="/fotos/BocetoLogoTransparente.png" alt="HoopersNet" />
+        <span>HoopersNet</span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="feed.html">Feed</a>
+        <a href="retos.html" class="activo">Retos</a>
+        <a href="explorarJugadores.html">Explorar</a>
+      </nav>
+
+      <div class="nav-right">
+        <a href="miPerfil.html" class="nav-profile" title="Mi perfil">
+          <i class="fa-regular fa-user"></i>
+        </a>
+
+        <button id="btn-logout" class="nav-logout" type="button" title="Cerrar sesión">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="retos-main">
+
+    <!-- HERO -->
+    <section class="retos-hero">
+      <div class="retos-hero-left">
+        <h1>Retos</h1>
+        <p>
+          Compite, demuestra consistencia y gana visibilidad.
+          Participa en retos activos o créalos si eres reclutador.
+        </p>
+
+      </div>
+
+      <!-- Solo reclutador: botón crear -->
+      <div class="retos-hero-right">
+        <button id="btn-abrir-crear-reto" class="btn-primary" type="button" style="display:none;">
+          <i class="fa-solid fa-plus"></i>
+          Crear reto
+        </button>
+        <small id="hint-crear-reto" class="hint" style="display:none;">
+          Solo reclutadores pueden crear retos.
+        </small>
+      </div>
+    </section>
+
+    <!-- TOOLBAR -->
+    <section class="retos-toolbar">
+      <div class="toolbar-left">
+        <div class="input-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="filtro-busqueda" type="text" placeholder="Buscar reto (ej: tiros libres, dribbling...)" />
+        </div>
+
+        <select id="filtro-dificultad">
+          <option value="">Dificultad (todas)</option>
+          <option value="easy">Fácil</option>
+          <option value="medium">Media</option>
+          <option value="hard">Difícil</option>
+        </select>
+
+        <select id="filtro-estado">
+          <option value="active">Activos</option>
+          <option value="closed">Cerrados</option>
+        </select>
+      </div>
+
+      <div class="toolbar-right">
+        <button id="btn-limpiar-filtros" class="btn-ghost" type="button">
+          Limpiar
+        </button>
+      </div>
+    </section>
+
+    <!-- LISTADO -->
+    <section class="retos-grid" id="retos-grid"></section>
+
+    <p id="retos-empty" class="empty" style="display:none;">
+      No hay retos para mostrar con estos filtros.
+    </p>
+
+  </main>
+
+  <!-- MODAL: DETALLE DEL RETO -->
+  <div class="modal-overlay" id="modal-reto-overlay" style="display:none;">
+    <div class="modal-card modal-reto">
+      <button class="modal-x" id="btn-cerrar-reto" type="button" aria-label="Cerrar">✕</button>
+
+      <div class="modal-header">
+        <h2 id="detalle-titulo">Título del reto</h2>
+        <div class="modal-sub">
+          <span id="detalle-badge" class="badge badge-medium">Media</span>
+          <span id="detalle-cierre" class="meta"><i class="fa-regular fa-clock"></i> Cierra en 6 días</span>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <h3>Reglas</h3>
+        <p id="detalle-reglas" class="text-block">
+          Aquí van las reglas del reto...
+        </p>
+
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Cupos</span>
+            <span id="detalle-cupos" class="detail-value">20</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Creador</span>
+            <span id="detalle-creador" class="detail-value">Coach Davis</span>
+          </div>
+        </div>
+
+        <!-- PANEL: INTENTOS (solo recruiter creador lo verá; JS lo muestra/oculta) -->
+<div id="detalle-intentos-panel" class="intentos-panel" style="display:none; margin-top:16px;">
+  <h3 style="margin: 0 0 10px 0;">Intentos</h3>
+
+  <p id="detalle-intentos-empty" class="empty" style="display:none; opacity:.85;">
+    Aún no hay intentos para este reto.
+  </p>
+
+  <div id="detalle-intentos-list" class="intentos-list"></div>
+</div>
+
+
+        <!-- Acciones -->
+        <div class="modal-actions">
+          <button id="btn-participar" class="btn-primary" type="button" style="display:none;">
+            <i class="fa-solid fa-paper-plane"></i>
+            Participar
+          </button>
+
+          <!-- (Dejamos esto listo para futuro) -->
+          <button id="btn-ver-envios" class="btn-ghost" type="button" style="display:none;">
+            Ver envíos
+          </button>
+
+          <button class="btn-ghost" id="btn-cerrar-reto-2" type="button">
+            Cerrar
+          </button>
+        </div>
+
+        <small id="hint-participar" class="hint" style="display:none;">
+          Solo jugadores pueden participar.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREAR RETO (solo reclutador) -->
+  <div class="modal-overlay" id="modal-crear-overlay" style="display:none;">
+    <div class="modal-card">
+      <button class="modal-x" id="btn-cerrar-crear" type="button" aria-label="Cerrar">✕</button>
+
+      <div class="modal-header">
+        <h2>Crear reto</h2>
+        <p class="hint">Define una prueba clara. Un intento por jugador. Cierre recomendado: 7 días.</p>
+      </div>
+
+      <form id="form-crear-reto" class="modal-body">
+        <label class="label">Título</label>
+        <input id="crear-titulo" class="input" type="text" maxlength="90" placeholder="Ej: 3 tiros libres seguidos" required />
+
+        <label class="label">Reglas</label>
+        <textarea id="crear-reglas" class="textarea" rows="5" maxlength="800" placeholder="Describe condiciones, cámara, intentos, etc." required></textarea>
+
+        <div class="two-cols">
+          <div>
+            <label class="label">Dificultad</label>
+            <select id="crear-dificultad" class="select" required>
+              <option value="easy">Fácil</option>
+              <option value="medium" selected>Media</option>
+              <option value="hard">Difícil</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="label">Cupos</label>
+            <input id="crear-cupos" class="input" type="number" min="1" max="200" value="20" required />
+          </div>
+        </div>
+
+        <div class="two-cols">
+          <div>
+            <label class="label">Cierre (días)</label>
+            <input id="crear-cierre-dias" class="input" type="number" min="1" max="30" value="7" required />
+          </div>
+
+          <div class="hint-box">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Tip: mientras más específico, más fácil de validar.</span>
+          </div>
+        </div>
+
+        <p id="crear-error" class="error" style="display:none;"></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="btn-cancelar-crear">Cancelar</button>
+          <button type="submit" class="btn-primary">Crear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SUBIR INTENTO (jugador) -->
+  <div class="modal-overlay" id="modal-intento-overlay" style="display:none;">
+    <div class="modal-card">
+      <button class="modal-x" id="btn-cerrar-intento" type="button" aria-label="Cerrar">✕</button>
+
+      <div class="modal-header">
+        <h2>Enviar intento</h2>
+        <p class="hint">Sube un solo video. Sin cortes (según reglas del reto).</p>
+      </div>
+
+      <form id="form-intento" class="modal-body">
+        <label class="label">Video</label>
+        <input id="intento-video" class="input" type="file" accept="video/*" required />
+        <small class="hint">Formato recomendado: MP4 · Tamaño sugerido: 50 MB</small>
+
+        <div id="intento-upload-wrap" style="display:none; margin-top:10px;">
+          <progress id="intento-upload-bar" value="0" max="100" style="width:100%;"></progress>
+          <div id="intento-upload-texto" style="margin-top:6px; font-size: 0.9rem; opacity:.9;">0%</div>
+        </div>
+
+        <p id="intento-error" class="error" style="display:none;"></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="btn-cancelar-intento">Cancelar</button>
+          <button type="submit" class="btn-primary">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ENVÍOS DEL RETO (solo reclutador creador) -->
+<div class="modal-overlay" id="modal-envios-overlay" style="display:none;">
+  <div class="modal-card">
+    <button class="modal-x" id="btn-cerrar-envios" type="button" aria-label="Cerrar">✕</button>
+
+    <div class="modal-header">
+      <h2>Envíos del reto</h2>
+      <p class="hint" id="envios-subtitle">Aquí verás los intentos enviados por jugadores.</p>
+    </div>
+
+    <div class="modal-body">
+      <div id="envios-list" class="envios-list"></div>
+      <p id="envios-empty" class="hint" style="display:none;">Aún no hay envíos para este reto.</p>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- MODAL: Ver video (reutilizable) -->
+<div class="modal-overlay" id="modal-video-overlay" style="display:none;">
+  <div class="modal-video" role="dialog" aria-modal="true" aria-label="Reproductor de video"
+       style="max-width:900px;width:min(92vw,900px);background:#0b0b0b;border-radius:14px;padding:14px;position:relative;">
+    <button type="button" id="btn-cerrar-video"
+      style="position:absolute;top:10px;right:10px;border:none;background:transparent;color:white;font-size:22px;cursor:pointer;
+             padding:10px;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;z-index:20;">
+      ✕
+    </button>
+
+    <video id="modal-video-player" controls style="width:100%;height:auto;border-radius:10px;" preload="metadata"></video>
+  </div>
+</div>
+
+
+  <script type="module" src="/js/retos.js"></script>
+</body>
+</html>

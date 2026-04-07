@@ -1,0 +1,38 @@
+/* Solo parches para verificaEmail.html, sin tocar login.css */
+
+html,
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+  background: linear-gradient(135deg, #050b16 0%, #0a1423 45%, #0d1728 100%);
+}
+
+.auth-hero {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+}
+
+.hero {
+  min-height: 100vh;
+  margin: 0;
+}
+
+.hero-inner,
+.auth-inner {
+  min-height: 100vh;
+}
+
+@media (max-width: 899px) {
+  .auth-hero,
+  .hero,
+  .hero-inner,
+  .auth-inner {
+    min-height: 100vh;
+  }
+}

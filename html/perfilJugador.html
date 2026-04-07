@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil del Jugador - HoopersNet</title>
+
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/perfiljugador.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png">
+  <script src="https://kit.fontawesome.com/d47483145d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <header class="perfil-header">
+    <div class="header-top">
+      <a href="feed.html" class="volver">
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver al menú
+      </a>
+
+<div class="header-actions">
+
+  <!-- ⭐ sigue igual -->
+  <button id="btn-favorito" class="btn-logout btn-favorito" type="button" style="display:none;">
+    <i class="fa-solid fa-star"></i>
+    Agregar a favoritos
+  </button>
+
+  <!-- Menú ⋮ -->
+  <div class="menu-wrapper" id="perfil-menu-wrap">
+    <button id="btn-menu" class="btn-menu" type="button" title="Opciones" aria-expanded="false">
+      <i class="fa-solid fa-ellipsis-vertical"></i>
+    </button>
+
+    <div id="menu-dropdown" class="menu-dropdown" style="display:none;">
+      <button id="menu-editar" type="button" class="menu-item">
+        <i class="fa-solid fa-pen-to-square"></i>
+        Editar perfil
+      </button>
+
+      <button id="menu-logout" type="button" class="menu-item">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+
+  <!-- Mantener elementos originales para NO romper tu JS -->
+  <button id="btn-logout" class="btn-logout sr-only" type="button" title="Cerrar sesión">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Cerrar sesión
+  </button>
+
+  <span id="btn-editar-perfil" class="editar sr-only">
+    <i class="fa-solid fa-pen-to-square"></i>
+    Editar perfil
+  </span>
+
+</div>
+
+
+    </div>
+
+
+    <div class="info">
+<div class="avatar-shell">
+  <div class="icono avatar-wrap">
+    <img id="avatar-img" class="avatar-img" alt="Foto de perfil" style="display:none;" />
+    <i id="avatar-fallback" class="fa-regular fa-user avatar-fallback"></i>
+  </div>
+
+  <button id="btn-avatar-edit" class="avatar-edit" type="button" title="Cambiar foto" style="display:none;">
+    <i class="fa-solid fa-pen"></i>
+  </button>
+
+  <input id="avatar-file" type="file" accept="image/*" hidden />
+</div>
+
+
+      <h1 id="nombre-header">Nombre del Jugador</h1>
+      <p class="sublinea">
+        <span id="posicion">Posición: —</span>
+        · <span id="ciudad-header">Ciudad: —</span>
+        · <span id="edad-header">Edad: —</span>
+      </p>
+
+      <div class="score-strip">
+  <div class="score-chip">
+    <span class="score-label">RankingScore</span>
+    <span class="score-value" id="score-ranking">0</span>
+  </div>
+
+  
+  <div class="score-chip">
+    <span class="score-label">15 días</span>
+    <span class="score-value" id="score-30d">0</span>
+  </div>
+
+  <div class="score-chip">
+    <span class="score-label">Total</span>
+    <span class="score-value" id="score-total">0</span>
+  </div>
+</div>
+
+
+    </div>
+  </header>
+
+
+
+<main>
+  <!-- Tabs estilo IG (Principal / Solicitudes) -->
+<nav class="perfil-tabs" id="perfil-tabs" style="display:none;">
+  <button class="tab-btn tab-activo" id="tab-btn-principal" type="button">
+    <i class="fa-solid fa-table-cells"></i>
+    Principal
+  </button>
+
+  <button class="tab-btn" id="tab-btn-publicaciones" type="button">
+    <i class="fa-solid fa-clapperboard"></i>
+    Publicaciones
+  </button>
+
+  <button class="tab-btn" id="tab-btn-solicitudes" type="button" style="display:none;">
+    <i class="fa-solid fa-bookmark"></i>
+    Solicitudes
+    <span class="tab-badge" id="tab-badge-solicitudes" style="display:none;">0</span>
+  </button>
+
+  <button class="tab-btn" id="tab-btn-retos-participados" type="button" style="display:none;">
+    <i class="fa-solid fa-trophy"></i>
+    Retos
+  </button>
+
+</nav>
+
+
+  <!-- VISTA: PRINCIPAL -->
+  <div id="view-principal">
+    <!-- BLOQUE PRINCIPAL: DATOS PERSONALES + HAZTE VISIBLE -->
+    <section class="perfil-contenido">
+      <!-- COLUMNA IZQUIERDA: DATOS PERSONALES -->
+      <div class="perfil-col">
+        <h2>Datos personales</h2>
+        <ul class="datos-lista">
+          <li>
+            <span class="etiqueta">Nombre completo</span>
+            <span id="dato-nombre">Nombre del Jugador</span>
+          </li>
+          <li>
+            <span class="etiqueta">Género</span>
+            <span id="dato-genero">—</span>
+          </li>
+          <li>
+            <span class="etiqueta">Nacionalidad</span>
+            <span id="dato-nacionalidad">Colombia</span>
+          </li>
+          <li>
+            <span class="etiqueta">Departamento y ciudad</span>
+            <span id="dato-ubicacion">—</span>
+          </li>
+          <li>
+            <span class="etiqueta">Fecha de nacimiento</span>
+            <span id="dato-fecha">—</span>
+          </li>
+          <li>
+            <span class="etiqueta">Altura</span>
+            <span id="dato-altura">— cm</span>
+          </li>
+          <li>
+            <span class="etiqueta">Peso</span>
+            <span id="dato-peso">— kg</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- COLUMNA DERECHA: HAZTE VISIBLE -->
+      <div class="perfil-col">
+        <h2>Hazte visible</h2>
+
+        <div class="bloque">
+          <h3>Resumen deportivo</h3>
+          <p>
+            <span class="etiqueta-inline">Nivel actual:</span>
+            <span id="nivel-actual">—</span>
+          </p>
+          <p>
+            <span class="etiqueta-inline">Equipo / institución:</span>
+            <span id="institucion-actual">—</span>
+          </p>
+        </div>
+
+        <div class="bloque">
+          <h3>Video Principal</h3>
+          <p class="ayuda-video">
+            Comparte tu mejor highlight, clip o partido completo para que los reclutadores puedan verte en acción.
+          </p>
+          <a href="#" id="link-video" class="btn-video" target="_blank" rel="noopener">
+            <i class="fa-solid fa-play"></i>
+            Ver video principal
+          </a>
+        </div>
+
+        <div class="bloque">
+          <h3>Contacto para reclutadores</h3>
+          <p>
+            <span class="etiqueta-inline">Email:</span>
+            <span id="contacto-email">—</span>
+          </p>
+        </div>
+
+
+        <div class="bloque">
+          <h3>Descripción breve</h3>
+          <p id="descripcionBreve">
+            Añade una breve descripción sobre tu estilo de juego, tus fortalezas y lo que buscas como jugador
+            (por ejemplo: becas universitarias, pruebas en el exterior, nuevos equipos, etc.).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    
+  </div>
+
+
+  <!-- VISTA: PUBLICACIONES -->
+<div id="view-publicaciones" style="display:none;">
+  <!-- SECCIÓN DE PUBLICACIONES DEL JUGADOR (la misma que ya tenías) -->
+  <section class="perfil-publicaciones" id="publicaciones-section">
+    <div class="publicaciones-header">
+      <h2>Publicaciones del jugador</h2>
+      <p>
+        Este es el historial de highlights, partidos y momentos que el jugador ha compartido.
+        Aquí un reclutador puede ver su evolución y actividad.
+      </p>
+    </div>
+
+    <div class="publicaciones-lista" id="lista-publicaciones-jugador">
+      <!-- ...deja tu placeholder o déjalo vacío, perfilPublicaciones.js lo llena... -->
+    </div>
+  </section>
+</div>
+
+
+  <!-- VISTA: SOLICITUDES (solo dueño) -->
+  <div id="view-solicitudes" style="display:none;">
+    <!-- SECCIÓN: SOLICITUDES DE CONTACTO (solo dueño del perfil) -->
+    <section id="contacto-section" class="perfil-publicaciones" style="display:none;">
+      <div class="publicaciones-header">
+        <h2>Solicitudes de contacto</h2>
+        <p>
+          Reclutadores verificados han solicitado contacto.
+          Al aceptar, verás su correo para que puedas escribirles.
+        </p>
+      </div>
+
+      <div class="publicaciones-lista" id="contacto-list">
+        <!-- Se llena con JS -->
+      </div>
+
+      <p id="contacto-empty" style="display:none; margin-top:12px; opacity:.8;">
+        Aún no tienes solicitudes de contacto.
+      </p>
+    </section>
+  </div>
+
+<!-- VISTA: RETOS PARTICIPADOS -->
+<div id="view-retos" style="display:none;">
+  <section class="perfil-publicaciones" id="retos-participados-section">
+    <div class="publicaciones-header">
+      <h2>Retos participados</h2>
+      <p>
+        Aquí se muestran los retos en los que este jugador ha participado (enviando su video),
+        con el estado de revisión y acceso al video enviado.
+      </p>
+    </div>
+
+    <p id="retos-login-hint" style="display:none; margin-top:12px; opacity:.85;">
+      Inicia sesión para ver los retos participados.
+    </p>
+
+    <div class="publicaciones-lista" id="retos-list">
+      <!-- Se llena con JS -->
+    </div>
+
+    <p id="retos-empty" style="display:none; margin-top:12px; opacity:.8;">
+      Aún no hay participaciones en retos.
+    </p>
+  </section>
+</div>
+
+
+</main>
+
+
+  <!-- BOTÓN FLOTANTE: AÑADIR PUBLICACIÓN DEL JUGADOR -->
+  <button class="fab-publicacion" id="btn-abrir-modal">
+    <i class="fa-solid fa-plus"></i>
+  </button>
+
+  <!-- MODAL PARA NUEVA PUBLICACIÓN DEL JUGADOR -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-publicacion" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <h2 id="modal-titulo">Nueva publicación</h2>
+
+      <p class="modal-ayuda">
+        Sube un video (archivo) de tu highlight o partido completo para que los reclutadores
+        vean tu evolución.
+      </p>
+
+      <form id="form-publicacion">
+        <div class="modal-campo">
+          <label for="titulo-publicacion">Título</label>
+          <input
+            type="text"
+            id="titulo-publicacion"
+            maxlength="120"
+            required
+            placeholder="Ej: Highlight vs Colegio San Juan – Semifinal"
+          />
+        </div>
+
+        <div class="modal-campo">
+          <label for="descripcion-publicacion">Descripción</label>
+          <textarea
+            id="descripcion-publicacion"
+            rows="3"
+            maxlength="300"
+            placeholder="Cuenta brevemente qué se ve en el video (puntos, rol, torneo, etc.)."
+          ></textarea>
+        </div>
+
+        <div class="modal-campo">
+          <label for="tipo-publicacion">Tipo de publicación</label>
+          <select id="tipo-publicacion" required>
+            <option value="">Selecciona...</option>
+            <option value="highlight">Highlight</option>
+            <option value="partido">Partido completo</option>
+          </select>
+        </div>
+
+        <div class="modal-campo">
+          <label for="video-publicacion">Video</label>
+          <input
+            type="file"
+            id="video-publicacion"
+            accept="video/*"
+            required
+          />
+          <small style="display:block;margin-top:6px;opacity:.8;">
+            Formato recomendado: MP4. Tamaño máximo sugerido: 50 MB.
+          </small>
+        </div>
+
+        <p id="modal-error" class="modal-error"></p>
+
+        <div id="upload-wrap" style="display:none; margin-top:10px;">
+          <progress id="upload-progreso" value="0" max="100" style="width:100%;"></progress>
+          <div id="upload-texto" style="margin-top:6px; font-size: 0.9rem; opacity:.9;">0%</div>
+        </div>
+
+        <div class="modal-botones">
+          <button type="button" class="btn-modal cancelar" id="btn-cerrar-modal">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-modal publicar">
+            Publicar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<button id="btn-solicitar-contacto" class="fab-contacto" style="display:none;">
+  <i class="fa-solid fa-paper-plane"></i>
+</button>
+
+<div id="overlay-contacto" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Solicitar contacto</h3>
+      <button id="btn-cerrar-contacto" class="btn-cerrar">✕</button>
+    </div>
+
+    <form id="form-contacto">
+      <label>Mensaje (opcional)</label>
+      <textarea id="contacto-mensaje" rows="4" placeholder="Hola, me interesa tu perfil..."></textarea>
+
+      <p id="contacto-msg" class="mensaje"></p>
+
+      <div class="acciones">
+        <button type="button" id="btn-cancelar-contacto">Cancelar</button>
+        <button type="submit">Enviar solicitud</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL: Ver video (reutilizable) -->
+<div class="modal-overlay" id="modal-video-overlay" style="display:none;">
+  <div class="modal-video" role="dialog" aria-modal="true" aria-label="Reproductor de video"
+       style="max-width:900px;width:min(92vw,900px);background:#0b0b0b;border-radius:14px;padding:14px;position:relative;">
+    <button type="button" id="btn-cerrar-video"
+      style="position:absolute;top:10px;right:10px;border:none;background:transparent;color:white;font-size:22px;cursor:pointer;
+             padding:10px;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;z-index:5;">
+      ✕
+    </button>
+
+    <video id="modal-video-player" controls style="width:100%;height:auto;border-radius:10px;" preload="metadata"></video>
+  </div>
+</div>
+
+
+
+  <footer>
+    <div class="pie-pagina">
+      <h2>
+        <a href="#">Instagram</a> -
+        <a href="#">YouTube</a> -
+        <a href="#">TikTok</a> -
+        <a href="#">X</a> -
+        <a href="#">Facebook</a>
+      </h2>
+      <h3>2025 - HoopersNet</h3>
+    </div>
+  </footer>
+
+  
+<script type="module" src="/js/cargarPerfil.js"></script>
+<script type="module" src="/js/perfilPublicaciones.js"></script>
+
+</body>
+</html>

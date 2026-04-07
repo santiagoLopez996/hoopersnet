@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feed de publicaciones - HoopersNet</title>
+
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/feed.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png">
+  <script src="https://kit.fontawesome.com/d47483145d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- NAVBAR (mismo estilo que feed) -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <!-- Logo -->
+      <a href="index.html" class="logo">
+        <img src="/fotos/BocetoLogoTransparente.png" alt="HoopersNet" />
+        <span>HoopersNet</span>
+      </a>
+
+      <!-- Enlaces -->
+      <nav class="main-nav">
+        <a href="feed.html" class="activo">Feed</a>
+        <a href="retos.html">Retos</a>
+        <a href="explorarJugadores.html">Explorar jugadores</a>
+      </nav>
+
+
+
+      <!-- Icono de perfil -->
+      <div class="nav-right">
+
+      <a href="miPerfil.html" class="nav-profile" title="Mi perfil">
+        <i class="fa-regular fa-user"></i>
+      </a>
+
+        <button id="btn-logout" class="nav-logout" title="Cerrar sesión">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+
+</div>
+
+    </div>
+  </header>
+
+  <main class="feed-main">
+    <section class="feed-header">
+      <h1>Feed de publicaciones</h1>
+      <p>
+        Aquí verás los highlights, partidos y momentos clave que los jugadores comparten.
+        Piensa en esto como su línea de tiempo deportiva.
+      </p>
+    </section>
+    <section class="feed-contenido" id="feed-contenido"></section>
+  </main>
+
+  <!-- MODAL: EXPLORAR JUGADORES (solo filtros, no toca el feed) -->
+  <div class="modal-overlay" id="modal-overlay-filtros">
+    <div class="modal-filtros" role="dialog" aria-modal="true" aria-labelledby="modal-filtros-titulo">
+      <div class="modal-filtros-header">
+        <h2 id="modal-filtros-titulo">Explorar jugadores</h2>
+        <button type="button" class="btn-cerrar-filtros" id="btn-cerrar-filtros" aria-label="Cerrar filtros">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <p class="modal-ayuda">
+        Filtra por nombre, posición, ciudad o nivel para descubrir talento del baloncesto colombiano.
+      </p>
+
+      <form class="filtros-jugadores" id="filtros-jugadores">
+        <!-- Fila 1: nombre (ancho completo) -->
+        <div class="filtros-row filtros-row--nombre">
+          <div class="filtro-group filtro-group--nombre">
+            <label for="filtro-nombre">Buscar por nombre</label>
+            <input
+              type="text"
+              id="filtro-nombre"
+              name="nombre"
+              placeholder="Ej: Juan, Valentina..."
+            />
+          </div>
+        </div>
+
+        <!-- Fila 2: selects -->
+        <div class="filtros-row">
+          <div class="filtro-group">
+            <label for="filtro-posicion">Posición</label>
+            <select id="filtro-posicion" name="posicion">
+              <option value="">Todas</option>
+              <option value="base">Base</option>
+              <option value="escolta">Escolta</option>
+              <option value="alero">Alero</option>
+              <option value="ala-pivot">Ala-pívot</option>
+              <option value="pivot">Pívot</option>
+            </select>
+          </div>
+
+          <div class="filtro-group">
+            <label for="filtro-ciudad">Ciudad / Depto.</label>
+            <select id="filtro-ciudad" name="ciudad">
+              <option value="">Todas</option>
+              <option value="bogota">Bogotá</option>
+              <option value="medellin">Medellín</option>
+              <option value="cali">Cali</option>
+              <option value="barranquilla">Barranquilla</option>
+            </select>
+          </div>
+
+          <div class="filtro-group">
+            <label for="filtro-nivel">Nivel actual</label>
+            <select id="filtro-nivel" name="nivel">
+              <option value="">Todos</option>
+              <option value="colegio">Colegio</option>
+              <option value="universidad">Universidad</option>
+              <option value="liga">Liga departamental</option>
+              <option value="seleccion">Selección</option>
+            </select>
+          </div>
+
+         <div class="filtro-group filtro-group--acciones">
+  <label>&nbsp;</label>
+  <div class="filtros-acciones">
+    <button type="button" id="filtro-reset" class="btn-reset-filtros">
+      Limpiar filtros
+    </button>
+    <button type="button" id="filtro-buscar" class="btn-buscar-filtros">
+      Buscar
+    </button>
+  </div>
+</div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- BOTÓN FLOTANTE: AÑADIR PUBLICACIÓN -->
+  <button class="fab-publicacion" id="btn-abrir-modal" style="display:none">
+    <i class="fa-solid fa-plus"></i>
+  </button>
+
+  <!-- MODAL PARA NUEVA PUBLICACIÓN -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-publicacion" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <h2 id="modal-titulo">Nueva publicación</h2>
+
+      <p class="modal-ayuda">
+        Sube un video (archivo) de tu highlight, partido completo o entrenamiento.
+      </p>
+
+      <form id="form-publicacion">
+        <div class="modal-campo">
+          <label for="titulo-publicacion">Título</label>
+          <input
+            type="text"
+            id="titulo-publicacion"
+            maxlength="120"
+            required
+            placeholder="Ej: Highlight vs Colegio San Juan – Cuartos de final"
+          />
+        </div>
+
+        <div class="modal-campo">
+          <label for="descripcion-publicacion">Descripción</label>
+          <textarea
+            id="descripcion-publicacion"
+            rows="3"
+            maxlength="300"
+            placeholder="Cuenta brevemente qué se ve en el video (puntos, rol, torneo, etc.)."
+          ></textarea>
+        </div>
+
+        <div class="modal-campo">
+          <label for="tipo-publicacion">Tipo de publicación</label>
+          <select id="tipo-publicacion" required>
+            <option value="">Selecciona...</option>
+            <option value="highlight">Highlight</option>
+            <option value="partido">Partido completo</option>
+          </select>
+        </div>
+
+        <div class="modal-campo">
+          <label for="video-publicacion">Video</label>
+          <input
+            type="file"
+            id="video-publicacion"
+            accept="video/*"
+            required
+          />
+          <small style="display:block;margin-top:6px;opacity:.8;">
+            Formato recomendado: MP4. Tamaño máximo sugerido: 50 MB.
+          </small>
+        </div>
+
+        <p id="modal-error" class="modal-error"></p>
+
+        <div id="upload-wrap" style="display:none; margin-top:10px;">
+          <progress id="upload-progreso" value="0" max="100" style="width:100%;"></progress>
+          <div id="upload-texto" style="margin-top:6px; font-size: 0.9rem; opacity:.9;">0%</div>
+        </div>
+
+        <div class="modal-botones">
+          <button type="button" class="btn-modal cancelar" id="btn-cerrar-modal">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-modal publicar">
+            Publicar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: Reportar publicación -->
+<div class="modal-overlay" id="modal-overlay-reportar">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Reportar publicación</h2>
+      <button type="button" class="btn-cerrar" id="btn-cerrar-reportar">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-texto">
+        Cuéntanos qué está pasando. Tu reporte será revisado por el equipo de moderación de HoopersNet.
+      </p>
+
+      <form id="form-reporte">
+        <div class="campo">
+          <label for="motivo-reporte">Motivo del reporte</label>
+          <select id="motivo-reporte" required>
+            <option value="">Selecciona un motivo...</option>
+            <option value="perfil-falso">Perfil falso o suplantación</option>
+            <option value="uso-indebido">Uso indebido de la plataforma</option>
+            <option value="ofensivo">Contenido ofensivo o lenguaje inapropiado</option>
+            <option value="acoso">Acoso o comportamiento tóxico</option>
+            <option value="fraude">Intento de estafa o fraude</option>
+            <option value="spam">Spam o publicidad</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="comentarios-reporte">Comentarios adicionales (opcional)</label>
+          <textarea
+            id="comentarios-reporte"
+            rows="4"
+            placeholder="Describe brevemente qué ocurrió..."
+          ></textarea>
+        </div>
+
+        <p id="mensaje-reporte" class="mensaje"></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secundario" id="btn-cancelar-reporte">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-primario">
+            Enviar reporte
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Ver video (reutilizable) -->
+<div class="modal-overlay" id="modal-video-overlay" style="display:none;">
+  <div class="modal-video" role="dialog" aria-modal="true" aria-label="Reproductor de video"
+       style="max-width:900px;width:min(92vw,900px);background:#0b0b0b;border-radius:14px;padding:14px;position:relative;">
+<button type="button" id="btn-cerrar-video"
+  style="position:absolute;top:10px;right:10px;border:none;background:transparent;color:white;font-size:22px;cursor:pointer;
+         padding:10px;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;z-index:5;">
+  ✕
+</button>
+
+
+    <video id="modal-video-player" controls style="width:100%;height:auto;border-radius:10px;" preload="metadata"></video>
+  </div>
+</div>
+
+
+
+  <footer class="site-footer">
+    <p>© 2026 HoopersNet · Plataforma para visibilizar el talento del baloncesto colombiano.</p>
+  </footer>
+
+  <!-- JS para manejar modal de publicaciones + modal de explorar -->
+  <script type="module" src="/js/feedAuth.js"></script>
+  <script type="module" src="/js/feed.js"></script>
+
+</body>
+</html>

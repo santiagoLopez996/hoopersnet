@@ -1,0 +1,253 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+function isRecruiterUid(uid) {
+  return signedIn()
+    && get(/databases/$(database)/documents/users/$(uid)).data.role == "recruiter";
+}
+
+function isVerifiedRecruiter(uid) {
+  return signedIn()
+    && get(/databases/$(database)/documents/users/$(uid)).data.role == "recruiter"
+    && get(/databases/$(database)/documents/users/$(uid)).data.verified == true;
+}
+
+function isAdminUid(uid) {
+  return signedIn()
+    && get(/databases/$(database)/documents/users/$(uid)).data.role == "admin";
+}
+
+function isPlayerUid(uid) {
+  return signedIn()
+    && get(/databases/$(database)/documents/users/$(uid)).data.role == "player";
+}
+
+function slotsUsedOf(ch) {
+  return ("slotsUsed" in ch) ? ch.slotsUsed : 0;
+}
+
+// ✅ verifica cupos en challenge (si slots no existe, asumimos no limitado)
+function capOk(ch) {
+  return !("slots" in ch) || ch.slots <= 0 || slotsUsedOf(ch) < ch.slots;
+}
+
+
+
+    // ==========================
+    // users/{uid} (privado)
+    // ==========================
+    match /users/{uid} {
+      allow read, create, update, delete: if isOwner(uid);
+
+      // Favoritos del reclutador
+      match /favorites/{playerUid} {
+        allow read, create, update, delete: if isOwner(uid) && isRecruiterUid(uid);
+      }
+    }
+
+    // ==========================
+    // profiles/{uid} (público)
+    // ==========================
+    match /profiles/{uid} {
+      allow get: if true;
+      allow list: if signedIn();
+      allow create, update, delete: if isOwner(uid);
+    }
+
+    // ==========================
+    // verification_requests/{uid}
+    // ==========================
+    match /verification_requests/{uid} {
+      allow read, create, update, delete: if isOwner(uid);
+    }
+
+    // ==========================
+    // posts
+    // ==========================
+    match /posts/{postId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && request.resource.data.ownerUid == request.auth.uid;
+
+      allow update, delete: if signedIn()
+        && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // ==========================
+    // Contacto (reclutador -> jugador)
+    // ==========================
+    match /contact_requests/{playerUid}/items/{recruiterUid} {
+
+      allow read: if isOwner(playerUid)
+        || (signedIn() && request.auth.uid == recruiterUid)
+        || (signedIn() && resource.data.fromUid == request.auth.uid);
+
+      allow create: if signedIn()
+        && request.auth.uid == recruiterUid
+        && isVerifiedRecruiter(request.auth.uid)
+        && !exists(/databases/$(database)/documents/contact_requests/$(playerUid)/items/$(recruiterUid))
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.status == "pending";
+
+      allow update: if isOwner(playerUid)
+        && request.resource.data.fromUid == resource.data.fromUid
+        && request.resource.data.fromName == resource.data.fromName
+        && request.resource.data.fromOrg == resource.data.fromOrg
+        && request.resource.data.fromRole == resource.data.fromRole
+        && request.resource.data.fromVerified == resource.data.fromVerified
+        && request.resource.data.message == resource.data.message
+        && (
+          (resource.data.status == "pending"
+            && request.resource.data.status in ["accepted", "rejected"])
+          ||
+          (resource.data.status == "rejected"
+            && request.resource.data.status == "pending"
+            && resource.data.respondedAt is timestamp
+            && request.time < (resource.data.respondedAt + duration.value(10, "s")))
+        );
+
+      allow delete: if isOwner(playerUid)
+        || (signedIn() && request.auth.uid == recruiterUid)
+        || (signedIn() && resource.data.fromUid == request.auth.uid);
+    }
+
+    match /contact_reveals/{playerUid}/items/{recruiterUid} {
+
+      allow create: if signedIn()
+        && request.auth.uid == recruiterUid
+        && isVerifiedRecruiter(request.auth.uid)
+        && !exists(/databases/$(database)/documents/contact_reveals/$(playerUid)/items/$(recruiterUid))
+        && exists(/databases/$(database)/documents/contact_requests/$(playerUid)/items/$(recruiterUid))
+        && get(/databases/$(database)/documents/contact_requests/$(playerUid)/items/$(recruiterUid)).data.status == "pending"
+        && request.resource.data.recruiterEmail
+          == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.contactEmail;
+
+      allow read: if isOwner(playerUid)
+        && exists(/databases/$(database)/documents/contact_requests/$(playerUid)/items/$(recruiterUid))
+        && get(/databases/$(database)/documents/contact_requests/$(playerUid)/items/$(recruiterUid)).data.status == "accepted";
+
+      allow update, delete: if false;
+    }
+
+    // ==========================
+    // post_reports/{reportId}
+    // ==========================
+    match /post_reports/{reportId} {
+      allow create: if signedIn()
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.postId is string
+        && request.resource.data.postOwnerUid is string
+        && request.resource.data.reason is string
+        && request.resource.data.reason in [
+          "perfil-falso", "uso-indebido", "ofensivo", "acoso", "fraude", "spam", "otro"
+        ]
+        && (!("comment" in request.resource.data) || request.resource.data.comment.size() <= 600)
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.status == "open";
+
+      allow read, update, delete: if false;
+    }
+
+    // ==========================
+    // RETOS (challenges)
+    // ==========================
+match /challenges/{challengeId} {
+  allow read: if true;
+
+  // Crear reto: recruiter
+  allow create: if signedIn()
+    && isRecruiterUid(request.auth.uid)
+    && request.resource.data.createdByUid == request.auth.uid
+    && request.resource.data.status == "active"
+    && request.resource.data.slotsUsed == 0;
+
+  // Update:
+  // - recruiter creador o admin: puede editar
+  // - player: SOLO puede incrementar slotsUsed y status en el MISMO commit donde crea su submission
+  allow update: if signedIn()
+    && (
+      // Creador o admin
+      resource.data.createdByUid == request.auth.uid
+      || isAdminUid(request.auth.uid)
+
+      // ✅ Player: solo tocar slotsUsed/status
+      || (
+        isPlayerUid(request.auth.uid)
+        && resource.data.status == "active"
+
+        // solo cambia estas 2 llaves
+        && request.resource.data.diff(resource.data).changedKeys().hasOnly(["slotsUsed","status"])
+
+        // incrementa slotsUsed exactamente +1
+        && request.resource.data.slotsUsed == (slotsUsedOf(resource.data) + 1)
+        && request.resource.data.slotsUsed <= resource.data.slots
+
+        // status coherente con cupos
+        && (
+          (request.resource.data.slotsUsed < resource.data.slots && request.resource.data.status == "active")
+          || (request.resource.data.slotsUsed == resource.data.slots && request.resource.data.status == "closed")
+        )
+
+        // exige que en ESTE MISMO commit se cree el submission del jugador
+        && !exists(/databases/$(database)/documents/challenge_submissions/$(challengeId + "_" + request.auth.uid))
+        && existsAfter(/databases/$(database)/documents/challenge_submissions/$(challengeId + "_" + request.auth.uid))
+      )
+    );
+
+  allow delete: if signedIn()
+    && (resource.data.createdByUid == request.auth.uid || isAdminUid(request.auth.uid));
+}
+
+
+
+    // ==========================
+// ENVIOS DE RETOS (challenge_submissions)
+// DocId: `${challengeId}_${playerUid}`  (1 intento)
+// ==========================
+match /challenge_submissions/{submissionId} {
+
+  // Crear: jugador dueño + reto existe + cupos disponibles
+  allow create: if signedIn()
+    && request.resource.data.playerUid == request.auth.uid
+    && request.resource.data.challengeId is string
+    && request.resource.data.videoUrl is string
+    && submissionId == (request.resource.data.challengeId + "_" + request.auth.uid)
+    && exists(/databases/$(database)/documents/challenges/$(request.resource.data.challengeId))
+    && capOk(get(/databases/$(database)/documents/challenges/$(request.resource.data.challengeId)).data);
+
+  // Leer: cualquier logueado (modo comunidad)
+  allow read: if signedIn();
+
+  // Update (aprobar/rechazar): recruiter creador o admin
+  allow update: if signedIn()
+    && (
+      isAdminUid(request.auth.uid)
+      || (
+        isRecruiterUid(request.auth.uid)
+        && get(/databases/$(database)/documents/challenges/$(resource.data.challengeId)).data.createdByUid
+          == request.auth.uid
+      )
+    )
+    // No cambiar identidad ni video
+    && request.resource.data.playerUid == resource.data.playerUid
+    && request.resource.data.challengeId == resource.data.challengeId
+    && request.resource.data.videoUrl == resource.data.videoUrl
+    && request.resource.data.videoPath == resource.data.videoPath;
+
+  allow delete: if false;
+}
+
+
+
+
+    // ✅ Siempre al final:
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

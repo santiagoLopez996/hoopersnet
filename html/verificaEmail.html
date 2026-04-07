@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+  <link rel="stylesheet" href="/css/verificaEmail.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png">
+  <title>Verifica tu email – HoopersNet</title>
+</head>
+
+<body>
+  <header class="hero auth-hero">
+    <div class="hero-inner auth-inner">
+
+      <div class="hero-text">
+        <p class="hero-kicker">HOOPERSNET</p>
+        <h1>Verifica tu correo</h1>
+        <p class="hero-lead">
+          Te enviamos un enlace de verificación a:
+          <strong id="correo">—</strong>
+        </p>
+        <p class="hero-lead" id="msg" style="margin-top:10px;"></p>
+        <a class="auth-back" href="login.html">← Volver al login</a>
+      </div>
+
+      <div class="auth-side">
+        <div class="auth-card">
+          <img src="/fotos/BocetoLogoTransparente.png" class="auth-logo" alt="HoopersNet" />
+          <h2 class="auth-title">Último paso</h2>
+          <p class="auth-subtitle">Revisa tu bandeja y spam.</p>
+
+          <button id="btn-resend" class="btn btn-jugador auth-submit" type="button">
+            Reenviar correo
+            <span class="btn-caption">Puede tardar 1–2 min</span>
+          </button>
+
+          <button id="btn-check" class="auth-link-btn" type="button" style="margin-top:10px;">
+            Ya verifiqué
+          </button>
+
+          <div class="auth-divider"></div>
+
+          <button id="btn-logout" class="auth-link-btn" type="button">
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <script type="module" src="/js/verificaEmail.js"></script>
+</body>
+</html>

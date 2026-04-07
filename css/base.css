@@ -1,0 +1,47 @@
+/* Base typography: corporate font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+:root {
+  --font-family-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-family-base);
+}
+
+/* Overlay centrado */
+#modal-video-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  display: none;              /* lo prendes con JS */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+}
+
+/* Caja del modal */
+#modal-video-overlay .modal-video{
+  width: min(92vw, 900px);
+  max-height: 88vh;           /* <- clave para que no se salga vertical */
+  background: #0b0b0b;
+  border-radius: 14px;
+  padding: 12px;
+  position: relative;
+  display: flex;
+}
+
+/* El video se adapta */
+#modal-video-player{
+  width: 100%;
+  height: auto;
+  max-height: 84vh;           /* <- clave para videos verticales */
+  object-fit: contain;        /* <- mantiene proporción y no recorta */
+  border-radius: 10px;
+  background: #000;
+}

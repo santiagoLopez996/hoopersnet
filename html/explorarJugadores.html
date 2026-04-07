@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorar jugadores - HoopersNet</title>
+
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/explorarJugadores.css" />
+  <script src="https://kit.fontawesome.com/d47483145d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- NAVBAR (mismo estilo que feed) -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <!-- Logo -->
+      <a href="index.html" class="logo">
+        <img src="/fotos/BocetoLogoTransparente.png" alt="HoopersNet" />
+        <span>HoopersNet</span>
+      </a>
+
+      <!-- Enlaces -->
+      <nav class="main-nav">
+        <a href="feed.html">Feed</a>
+        <a href="retos.html">Retos</a>
+        <a href="explorarJugadores.html" class="activo">Explorar jugadores</a>
+      </nav>
+
+
+
+      <!-- Icono de perfil -->
+      <div class="nav-right">
+
+      <a href="miPerfil.html" class="nav-profile" title="Mi perfil">
+        <i class="fa-regular fa-user"></i>
+      </a>
+
+        <button id="btn-logout" class="nav-logout" title="Cerrar sesión">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+
+</div>
+
+    </div>
+  </header>
+
+  <main class="explorar-main">
+    <!-- HEADER + FILTROS -->
+    <section class="explorar-header">
+      <h1>Explorar jugadores</h1>
+      <p>
+        Filtra por nombre, posición, ciudad o nivel para encontrar el tipo de jugador que buscas
+        en el baloncesto colombiano.
+      </p>
+
+      <form class="filtros-jugadores" id="filtros-jugadores">
+        <!-- Fila 1: nombre -->
+        <div class="filtros-row filtros-row--nombre">
+          <div class="filtro-group filtro-group--nombre">
+            <label for="filtro-nombre">Buscar por nombre</label>
+            <input
+              type="text"
+              id="filtro-nombre"
+              name="nombre"
+              placeholder="Ej: Juan, Valentina..."
+            />
+          </div>
+        </div>
+
+        <!-- Fila 2: selects + acciones -->
+        <div class="filtros-row">
+          <div class="filtro-group">
+            <label for="filtro-posicion">Posición</label>
+            <select id="filtro-posicion" name="posicion">
+              <option value="">Todas</option>
+              <option value="PG">Base</option>
+              <option value="SG">Escolta</option>
+              <option value="SF">Alero</option>
+              <option value="PF">Ala-pívot</option>
+              <option value="C">Pívot</option>
+            </select>
+          </div>
+
+          <div class="filtro-group">
+            <label for="filtro-ciudad">Ciudad / Depto.</label>
+            <select id="filtro-ciudad" name="ciudad">
+              <option value="">Todas</option>
+              <option value="bogota">Bogotá</option>
+              <option value="medellin">Medellín</option>
+              <option value="cali">Cali</option>
+              <option value="barranquilla">Barranquilla</option>
+            </select>
+          </div>
+
+          <div class="filtro-group">
+            <label for="filtro-nivel">Nivel actual</label>
+            <select id="filtro-nivel" name="nivel">
+              <option value="">Todos</option>
+              <option value="colegio">Colegio</option>
+              <option value="universidad">Universidad</option>
+              <option value="liga">Liga departamental</option>
+              <option value="seleccion">Selección</option>
+            </select>
+          </div>
+
+          <div class="filtro-group filtro-group--acciones">
+            <label>&nbsp;</label>
+            <div class="filtros-acciones">
+              <button type="button" id="filtro-reset" class="btn-reset-filtros">
+                Limpiar filtros
+              </button>
+              <button type="button" id="filtro-buscar" class="btn-buscar-filtros">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="explorar-resultados">
+      <div class="explorar-resumen">
+        Mostrando <strong>0</strong> jugadores encontrados
+      </div>
+
+        <div class="grid-jugadores" id="grid-jugadores">
+        <!-- Aquí el JS inyecta las cards desde Firestore -->
+        </div>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 HoopersNet · Plataforma para visibilizar el talento del baloncesto colombiano.</p>
+  </footer>
+
+  <!-- JS minimal para resetear filtros (opcional por ahora) -->
+  <script type="module" src="/js/explorarJugadores.js"></script>
+
+</body>
+</html>

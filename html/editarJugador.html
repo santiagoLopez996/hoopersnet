@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar perfil (Jugador) - HoopersNet</title>
+
+  <link rel="stylesheet" href="/css/base.css" />
+  <!-- opcional: si quieres heredar estilos del registro -->
+  <link rel="stylesheet" href="/css/registroJugador.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png">
+</head>
+<body>
+  <div class="contenedor">
+    <h2>Editar perfil de jugador</h2>
+
+    <form id="form-editar-jugador" novalidate>
+      <div class="form-grid">
+        <div class="col">
+          <h4 class="col-titulo">Datos personales</h4>
+
+          <div class="elemento">
+            <label for="nombres">Nombres</label>
+            <input type="text" id="nombres" required />
+          </div>
+
+          <div class="elemento">
+            <label for="apellidos">Apellidos</label>
+            <input type="text" id="apellidos" required />
+          </div>
+
+          <div class="elemento">
+            <label for="nacionalidad">Nacionalidad</label>
+            <input type="text" id="nacionalidad" required />
+          </div>
+
+          <div class="elemento">
+            <label for="departamento">Departamento</label>
+            <input type="text" id="departamento" required />
+          </div>
+
+          <div class="elemento">
+            <label for="ciudad">Ciudad</label>
+            <input type="text" id="ciudad" required />
+          </div>
+
+          <div class="elemento">
+            <label for="fecha_nacimiento">Fecha de nacimiento</label>
+            <input type="date" id="fecha_nacimiento" required />
+          </div>
+        </div>
+
+        <div class="col">
+          <h4 class="col-titulo">Datos deportivos</h4>
+
+          <div class="elemento">
+            <label for="posicion">Posición</label>
+            <select id="posicion" required>
+              <option value="">Selecciona...</option>
+              <option value="PG">Base (PG)</option>
+              <option value="SG">Escolta (SG)</option>
+              <option value="SF">Alero (SF)</option>
+              <option value="PF">Ala-Pívot (PF)</option>
+              <option value="C">Pívot (C)</option>
+            </select>
+          </div>
+
+          <div class="elemento">
+            <label for="altura">Altura (cm)</label>
+            <input type="number" id="altura" min="100" max="250" required />
+          </div>
+
+          <div class="elemento">
+            <label for="peso">Peso (kg) <span class="opcional">(opcional)</span></label>
+            <input type="number" id="peso" min="30" max="200" placeholder="Ej: 80" />
+          </div>
+
+          <div class="elemento">
+            <label for="nivel">Nivel actual</label>
+            <select id="nivel" required>
+              <option value="">Selecciona...</option>
+              <option value="colegio">Colegio / Escolar</option>
+              <option value="club">Club</option>
+              <option value="universitario">Universitario</option>
+              <option value="profesional">Profesional / Semi-profesional</option>
+              <option value="aficionado">Aficionado organizado</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-grid" style="margin-top:16px;">
+        <div class="col">
+          <h4 class="col-titulo">Visibilidad</h4>
+
+          <div class="elemento">
+            <label for="contacto_reclutadores">Contacto para reclutadores</label>
+            <input type="text" id="contacto_reclutadores" placeholder="Correo o WhatsApp" required />
+          </div>
+
+          <div class="elemento">
+            <label for="institucion">Equipo / institución actual</label>
+            <input type="text" id="institucion" required />
+          </div>
+
+          <div class="elemento">
+            <label for="descripcion_breve">Descripción breve</label>
+            <textarea id="descripcion_breve" rows="3" maxlength="300"
+              placeholder="Tu estilo de juego, fortalezas, qué buscas, etc."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <p id="mensaje" class="mensaje"></p>
+
+      <div class="botones-paso" style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+        <button type="button" id="btn-cancelar" class="btn-paso atras">Cancelar</button>
+        <button type="submit" class="btn-paso enviar">Guardar cambios</button>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="/js/editarJugador.js"></script>
+</body>
+</html>
+    

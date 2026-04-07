@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editar perfil - Reclutador | HoopersNet</title>
+
+  <!-- Igual que registroReclutador.html -->
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/registroReclutador.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png" />
+</head>
+
+<body>
+  <div class="contenedor">
+    <h2>Editar perfil de reclutador</h2>
+    <p class="subtitulo">Actualiza tu información para que los jugadores te conozcan mejor.</p>
+
+    <form id="form-editar-reclutador">
+      <!-- Usamos una sola sección "paso activo" para reutilizar estilos -->
+      <section class="paso activo">
+        <h3>Tu información</h3>
+        <p class="paso-descripcion">
+          Esta información se mostrará en tu perfil público.
+        </p>
+
+        <div class="grupo">
+          <label for="nombres">Nombres</label>
+          <input type="text" id="nombres" name="nombres" required />
+        </div>
+
+        <div class="grupo">
+          <label for="apellidos">Apellidos</label>
+          <input type="text" id="apellidos" name="apellidos" required />
+        </div>
+
+        <div class="grupo">
+          <label for="genero">Genero</label>
+          <select name="genero" id="genero">
+            <option value="">Selecciona...</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+          </select>
+        </div>
+
+        <div class="grupo">
+          <label for="fechaNacimiento">Fecha de nacimiento</label>
+          <input type="date" id="fechaNacimiento" name="fechaNacimiento" required />
+        </div> 
+
+        <div class="grupo">
+          <label for="rol">Rol</label>
+          <select id="rol" name="rol" required>
+            <option value="">Selecciona tu rol...</option>
+            <option value="Coach">Coach</option>
+            <option value="Scout">Scout</option>
+            <option value="Agente">Agente</option>
+            <option value="Recruiting Staff">Recruiting Staff</option>
+            <option value="Director deportivo">Director deportivo</option>
+          </select>
+        </div>
+
+        <div class="grupo">
+          <label for="organizacion">Organización / Programa</label>
+          <input
+            type="text"
+            id="organizacion"
+            name="organizacion"
+            placeholder="Universidad, club, agencia, colegio..."
+            required
+          />
+        </div>
+
+        <div class="grupo">
+          <label for="pais">País</label>
+          <input
+            type="text"
+            id="pais"
+            name="pais"
+            placeholder="Ej: Estados Unidos, Colombia..."
+            required
+          />
+        </div>
+
+        <div class="grupo">
+          <label for="ciudad">Ciudad</label>
+          <input
+            type="text"
+            id="ciudad"
+            name="ciudad"
+            placeholder="Ej: Miami, Bogotá..."
+            required
+          />
+        </div>
+
+        <div class="grupo">
+          <label for="categoria">Categoría que reclutas</label>
+          <select id="categoria" name="categoria">
+            <option value="">Selecciona...</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Ambos">Ambos</option>
+          </select>
+        </div>
+
+        <div class="grupo">
+          <label for="nivel-busqueda">Nivel de jugadores que buscas</label>
+          <select id="nivel-busqueda" name="nivelBusqueda">
+            <option value="">Selecciona...</option>
+            <option value="Colegio">Colegio</option>
+            <option value="Universidad">Universidad</option>
+            <option value="Liga departamental">Liga departamental</option>
+            <option value="Profesional">Profesional</option>
+            <option value="Seleccion nacional">Selección nacional</option>
+            <option value="Cualquiera">Cualquiera</option>
+          </select>
+        </div>
+
+        <div class="grupo">
+          <label for="bio-corta">Breve descripción</label>
+          <textarea
+            id="bio-corta"
+            name="bioCorta"
+            rows="3"
+            placeholder="Ej: Busco guards explosivos 1.80+ con buen tiro exterior..."
+          ></textarea>
+        </div>
+
+        <div class="grupo">
+          <label for="web">Web / LinkedIn (opcional)</label>
+          <input type="url" id="web" name="web" placeholder="https://..." />
+        </div>
+
+        <p id="mensaje" class="mensaje"></p>
+
+        <div class="acciones">
+          <button type="button" id="btn-cancelar" class="btn-paso volver">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-paso enviar">
+            Guardar cambios
+          </button>
+        </div>
+      </section>
+    </form>
+  </div>
+
+  <script type="module" src="/js/editarReclutador.js"></script>
+  <script>
+    // Si ya lo tienes en editarReclutador.js, puedes borrar esto.
+    const btn = document.getElementById("btn-cancelar");
+    if (btn) btn.addEventListener("click", () => (window.location.href = "/html/perfilReclutador.html"));
+  </script>
+</body>
+</html>
