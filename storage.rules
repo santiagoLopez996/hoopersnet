@@ -1,0 +1,102 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    function ticketPath(ticketId) {
+      return /databases/(default)/documents/video_upload_tickets/$(ticketId);
+    }
+
+    function openPostTicket(uid, ticketId) {
+      return signedIn()
+        && firestore.exists(ticketPath(ticketId))
+        && firestore.get(ticketPath(ticketId)).data.uid == uid
+        && firestore.get(ticketPath(ticketId)).data.kind == "post"
+        && firestore.get(ticketPath(ticketId)).data.status == "open"
+        && request.time < firestore.get(ticketPath(ticketId)).data.expiresAt;
+    }
+
+    function openChallengeTicket(challengeId, playerUid, ticketId) {
+      return signedIn()
+        && firestore.exists(ticketPath(ticketId))
+        && firestore.get(ticketPath(ticketId)).data.uid == playerUid
+        && firestore.get(ticketPath(ticketId)).data.kind == "challenge"
+        && firestore.get(ticketPath(ticketId)).data.challengeId == challengeId
+        && firestore.get(ticketPath(ticketId)).data.status == "open"
+        && request.time < firestore.get(ticketPath(ticketId)).data.expiresAt;
+    }
+
+    match /verification_docs/{uid}/{fileName} {
+      allow read: if isOwner(uid);
+      allow write: if isOwner(uid)
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType == "application/pdf";
+    }
+
+    // ✅ Avatar
+    match /profile_photos/{uid}/{fileName} {
+      allow read: if true;
+
+      allow create, update: if isOwner(uid)
+        && request.resource.size < 2 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+
+      allow delete: if isOwner(uid);
+    }
+
+    // ==========================
+    // POSTS - LEGACY (videos viejos)
+    // ==========================
+    match /posts/{uid}/{fileName} {
+      allow read: if true;
+      allow delete: if isOwner(uid);
+      allow create, update: if false;
+    }
+
+    // ==========================
+    // POSTS - NUEVO FLUJO CON TICKET
+    // path exacto: posts/{uid}/{ticketId}/video
+    // ==========================
+    match /posts/{uid}/{ticketId}/video {
+      allow read: if true;
+
+      allow create, update: if isOwner(uid)
+        && openPostTicket(uid, ticketId)
+        && request.resource.size < 50 * 1024 * 1024
+        && request.resource.contentType.matches('video/.*');
+
+      allow delete: if isOwner(uid);
+    }
+
+    // ==========================
+    // CHALLENGE SUBMISSIONS - LEGACY
+    // ==========================
+    match /challenge_submissions/{challengeId}/{playerUid}/{fileName} {
+      allow read: if signedIn();
+      allow delete: if signedIn() && request.auth.uid == playerUid;
+      allow write: if false;
+    }
+
+    // ==========================
+    // CHALLENGE SUBMISSIONS - NUEVO FLUJO CON TICKET
+    // path exacto: challenge_submissions/{challengeId}/{playerUid}/{ticketId}/video
+    // ==========================
+    match /challenge_submissions/{challengeId}/{playerUid}/{ticketId}/video {
+      allow read: if signedIn();
+
+      allow create, update: if signedIn()
+        && request.auth.uid == playerUid
+        && openChallengeTicket(challengeId, playerUid, ticketId)
+        && request.resource.size < 60 * 1024 * 1024
+        && request.resource.contentType.matches('video/.*');
+
+      allow delete: if signedIn() && request.auth.uid == playerUid;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

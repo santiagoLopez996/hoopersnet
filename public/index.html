@@ -1,89 +1,200 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/style-index.css" />
+  <link rel="icon" href="/fotos/BocetoLogoTransparente.png">
+  <title>HoopersNet – Talento colombiano</title>
+</head>
+<body>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.9.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.9.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.9.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+  <!-- HERO / ENCABEZADO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-badge">Plataforma de reclutamiento de baloncesto en Colombia</p>
+        <h1>
+          HoopersNet
+           <br>
+          <span class="resaltado">Talento Colombiano</span>
+        </h1>
+        <p class="hero-subtitle">
+          HoopersNet conecta a jugadores jóvenes de baloncesto en Colombia con oportunidades deportivas reales.
+          Aquí los jugadores muestran su juego y los reclutadores pueden descubrirlos y contactarlos directamente.
+        </p>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+
+
+        <div class="hero-actions">
+          <div class="cta-stack">
+          <a href="/html/login.html" class="btn btn-jugador">
+            Iniciar sesión
+              <span class="btn-caption">Ya tengo cuenta</span>
+          </a>
+
+    <div class="new-user-block">
+      <p class="new-user-text">¿Eres nuevo?</p>
+
+      <button type="button" class="btn btn-reclutador" id="btn-crear-cuenta">
+        Crear cuenta
+        <span class="btn-caption">Elige jugador o reclutador</span>
+      </button>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+  </div>
+</div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+      </div>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+      <div class="hero-side">
+      <div class="hero-card hero-logo-card">
+        <img src="/fotos/BocetoLogoTransparente.png" alt="HoopersNet" class="hero-logo" />
+      </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- POR QUÉ EXISTE -->
+    <section class="section" id="por-que">
+      <div class="section-inner">
+        <h2>¿Por qué existe HoopersNet?</h2>
+        <p>
+          En el mundo del baloncesto siempre escuchamos las mismas historias: jugadores de Estados Unidos,
+          Europa y las grandes ligas. Pero en Colombia también hay talento que entrena, compite y sueña con llegar lejos.
+        </p>
+        <p>
+          HoopersNet nace como un golpe a esa realidad: una vitrina para que los jugadores colombianos puedan mostrarse
+          al mundo, especialmente a reclutadores y entrenadores de otros países.
+        </p>
+        <p class="destacado">
+          
+        </p>
+      </div>
+    </section>
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="section section-alt" id="como-funciona">
+      <div class="section-inner">
+        <h2>¿Cómo funciona?</h2>
+        <div class="columns">
+          <div class="column-card" id="jugadores">
+            <h3>Si eres jugador</h3>
+            <ol>
+              <li>
+                <strong>Crea tu perfil deportivo</strong><br>
+                Registra tus datos básicos: nombre, ciudad, estatura, posición, nivel actual y un medio de contacto.
+              </li>
+              <li>
+                <strong>Conecta tus videos</strong><br>
+                Agrega los links de tus partidos, highlights o clips (YouTube, TikTok, etc.) para que los reclutadores puedan verte en acción.
+              </li>
+              <li>
+                <strong>Hazte visible</strong><br>
+                Tu perfil entra en la vitrina de HoopersNet, donde entrenadores y scouts pueden encontrarte y contactarte directamente.
+              </li>
+            </ol>
+          </div>
+
+          <div class="column-card" id="reclutadores">
+            <h3>Si eres reclutador</h3>
+            <ol>
+              <li>
+                <strong>Explora jugadores colombianos</strong><br>
+                Recorre perfiles organizados por posición, ciudad, estatura y nivel competitivo.
+              </li>
+              <li>
+                <strong>Observa su juego</strong><br>
+                Accede a sus videos para ver cómo se mueven en cancha, cómo piensan el juego y en qué contexto compiten.
+              </li>
+              <li>
+                <strong>Contacta de forma directa</strong><br>
+                Desde el perfil del jugador podrás ver su correo o WhatsApp para coordinar pruebas, seguimiento
+                o simplemente empezar una conversación.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PARA RECLUTADORES -->
+    <section class="section" id="para-reclutadores">
+      <div class="section-inner">
+        <h2>Para reclutadores y entrenadores</h2>
+        <p>
+          HoopersNet está pensada para facilitar tu trabajo. En lugar de depender solo de recomendaciones sueltas
+          o videos que llegan por separado, aquí encuentras perfiles de jugadores colombianos con:
+        </p>
+        <ul class="bullet-list">
+          <li>Datos básicos organizados (edad, estatura, posición, ciudad).</li>
+          <li>Nivel actual (colegio, club, universidad, profesional, etc.).</li>
+          <li>Links directos a partidos y highlights.</li>
+          <li>Datos de contacto claros para seguir el proceso.</li>
+        </ul>
+
+        <div class="english-block">
+          <h3>For scouts &amp; coaches (EN)</h3>
+          <p>
+            HoopersNet is a platform to discover basketball talent from Colombia.
+            You’ll find player profiles with key info, game footage and direct contact details
+            so you can evaluate and reach out to players you’re interested in.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIÉN ESTÁ DETRÁS -->
+    <section class="section section-alt" id="quienes-somos">
+      <div class="section-inner">
+        <h2>Quién está detrás de HoopersNet</h2>
+        <p>
+          HoopersNet es un proyecto independiente creado desde Colombia con un objetivo simple:
+          darle visibilidad real a nuestros jugadores de baloncesto. No representamos directamente
+          a ningún club, liga ni federación; somos una plataforma que conecta talento con oportunidades.
+        </p>
+        <p>
+          Nos tomamos en serio el cuidado de los datos personales. La información que compartes en tu perfil
+          está pensada para que reclutadores interesados puedan contactarte, no para venderla ni usarla con otros fines.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>© 2026 HoopersNet · Plataforma de visibilidad para jugadores de baloncesto en Colombia.</p>
+      <p>Contacto: nethoopers@gmail.com · Instagram: @hoopersnet</p>
+    </div>
+  </footer>
+
+  <!-- Modal: elegir tipo de cuenta -->
+<div id="modal-cuenta" class="modal-overlay" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button type="button" class="modal-close" id="modal-cerrar" aria-label="Cerrar">✕</button>
+
+    <h2 id="modal-title">¿Qué perfil deseas crear?</h2>
+    <p class="modal-subtitle">Selecciona una opción para continuar con el registro.</p>
+
+    <div class="modal-actions">
+      <a href="/html/registroJugador.html" class="btn btn-jugador">
+        Jugador
+        <span class="btn-caption">Crear perfil de jugador</span>
+      </a>
+
+      <a href="/html/registroReclutador.html" class="btn btn-reclutador">
+        Reclutador
+        <span class="btn-caption">Crear cuenta de reclutador</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="/js/indexModal.js"></script>
+
+</body>
 </html>
